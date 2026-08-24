@@ -1,0 +1,2874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ASCO</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #070604;
+    --card: #110d0a;
+    --input: #19130f;
+    --orange: #ff6500;
+    --orange2: #ff8a2a;
+    --orange-glow: rgba(255, 101, 0, .35);
+    --border: #30221a;
+    --border2: #50372a;
+    --text: #f5eee9;
+    --muted: #806f64;
+    --black: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% -10%, rgba(255, 80, 0, .08), transparent 35%),
+        var(--bg);
+    color: var(--text);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    overflow-x: hidden;
+}
+
+/* =========================
+   MATRIX BACKGROUND
+========================= */
+
+#matrix {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: .055;
+    pointer-events: none;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: min(1200px, calc(100% - 32px));
+    margin: auto;
+    padding: 35px 0 60px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    text-align: center;
+    padding: 25px 0 35px;
+}
+
+.logo {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: 14px;
+    color: #fff;
+    text-shadow:
+        0 0 10px rgba(255,255,255,.25),
+        0 0 25px var(--orange-glow),
+        0 0 60px var(--orange-glow);
+}
+
+.subtitle {
+    margin-top: 10px;
+    color: var(--muted);
+    letter-spacing: 5px;
+    font-size: 11px;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.tab {
+    border: 1px solid var(--border);
+    background: rgba(17, 13, 10, .9);
+    color: var(--muted);
+    padding: 12px 28px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    transition: .2s ease;
+}
+
+.tab:hover {
+    color: var(--orange);
+    border-color: var(--orange);
+    box-shadow: 0 0 15px rgba(255,101,0,.12);
+}
+
+.tab.active {
+    color: #000;
+    background: var(--orange);
+    border-color: var(--orange);
+    box-shadow: 0 0 22px var(--orange-glow);
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.panel {
+    display: none;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.015),
+            transparent 40%
+        ),
+        var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.5),
+        inset 0 1px rgba(255,255,255,.02);
+}
+
+.panel.active {
+    display: block;
+    animation: panelIn .25s ease;
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   FORM
+========================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field.wide {
+    grid-column: span 2;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px 13px;
+    background: var(--input);
+    color: var(--orange);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    transition: .2s;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 2px rgba(255,101,0,.07);
+}
+
+input[type="file"] {
+    color: var(--muted);
+    cursor: pointer;
+}
+
+input[type="range"] {
+    padding: 0;
+    accent-color: var(--orange);
+    cursor: pointer;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    padding: 10px 19px;
+    border: 1px solid var(--orange);
+    border-radius: 6px;
+    background: var(--orange);
+    color: #000;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: .2s;
+}
+
+.btn:hover {
+    background: var(--orange2);
+    box-shadow: 0 0 18px var(--orange-glow);
+}
+
+.btn.secondary {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border2);
+}
+
+.btn.secondary:hover {
+    color: var(--orange);
+    border-color: var(--orange);
+}
+
+/* =========================
+   OUTPUT
+========================= */
+
+.output-wrap {
+    position: relative;
+}
+
+.output {
+    width: 100%;
+    min-height: 220px;
+    max-height: 620px;
+    overflow: auto;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255,101,0,.025),
+            transparent 65%
+        ),
+        #000;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    padding: 24px;
+
+    white-space: pre;
+    user-select: none;
+
+    color: var(--orange);
+
+    font-family:
+        "JetBrains Mono",
+        "Courier New",
+        monospace;
+
+    font-size: 8px;
+    font-weight: 700;
+    line-height: .82;
+    letter-spacing: 0;
+
+    text-shadow:
+        0 0 3px rgba(255,101,0,.18);
+}
+
+.output:empty::before {
+    content: "OUTPUT WILL APPEAR HERE...";
+    color: #3b2b21;
+}
+
+.output.interactive {
+    cursor: grab;
+}
+
+.output.interactive:active {
+    cursor: grabbing;
+}
+
+.stat {
+    text-align: right;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview {
+    text-align: center;
+    margin: 15px 0 20px;
+}
+
+.preview img,
+.preview video {
+    max-width: 100%;
+    max-height: 260px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+/* =========================
+   RANGE
+========================= */
+
+.range-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.range-field label {
+    margin: 0;
+    min-width: 65px;
+}
+
+.range-value {
+    width: 45px;
+    color: var(--orange);
+    font-size: 11px;
+    text-align: right;
+}
+
+/* =========================
+   API
+========================= */
+
+.api {
+    margin-top: 35px;
+}
+
+.api-title {
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.endpoint {
+    padding: 15px;
+    margin-bottom: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    border-radius: 6px;
+}
+
+.endpoint h3 {
+    font-size: 11px;
+    margin-bottom: 7px;
+}
+
+.method {
+    color: #ff3d67;
+    font-weight: 800;
+}
+
+.url {
+    color: #33c9ff;
+}
+
+.endpoint code {
+    display: block;
+    overflow-x: auto;
+    padding: 10px;
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: #ff9d42;
+    font-size: 10px;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #080604;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3a2920;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--orange);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 850px) {
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .field.wide {
+        grid-column: span 2;
+    }
+
+    .output {
+        font-size: 5px;
+        line-height: .75;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .container {
+        width: min(100% - 20px, 1200px);
+        padding-top: 15px;
+    }
+
+    .logo {
+        letter-spacing: 8px;
+    }
+
+    .subtitle {
+        letter-spacing: 2px;
+    }
+
+    .tabs {
+        gap: 6px;
+    }
+
+    .tab {
+        flex: 1;
+        padding: 10px 8px;
+        font-size: 10px;
+    }
+
+    .panel {
+        padding: 17px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.wide {
+        grid-column: span 1;
+    }
+
+    .output {
+        font-size: 4px;
+        line-height: .7;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+
+<header>
+    <div class="logo">ASCO</div>
+    <div class="subtitle">ASCII ART STUDIO</div>
+</header>
+
+<!-- =========================
+     TABS
+========================= -->
+
+<div class="tabs">
+
+    <!-- 3D is now TEXT -->
+    <button
+        class="tab active"
+        onclick="switchTab('text', this)">
+        TEXT
+    </button>
+
+    <button
+        class="tab"
+        onclick="switchTab('image', this)">
+        IMAGE
+    </button>
+
+    <button
+        class="tab"
+        onclick="switchTab('video', this)">
+        VIDEO
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     TEXT TAB
+     OLD 3D SYSTEM IS NOW HERE
+===================================================== -->
+
+<section class="panel active" id="panel-text">
+
+    <div class="grid">
+
+        <div class="field wide">
+            <label>Text</label>
+
+            <input
+                type="text"
+                id="text-input"
+                value="ASCO"
+                placeholder="Enter text..."
+                oninput="generateText()">
+        </div>
+
+        <div class="field">
+            <label>Font Style</label>
+
+            <select id="font-style" onchange="generateText()">
+                <option value="solid">SOLID</option>
+                <option value="sharp">SHARP</option>
+                <option value="tech">TECH</option>
+                <option value="soft">SOFT</option>
+                <option value="block">BLOCK</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Font Size</label>
+
+            <input
+                type="number"
+                id="text-size"
+                value="32"
+                min="12"
+                max="80"
+                oninput="generateText()">
+        </div>
+
+    </div>
+
+
+    <div class="grid">
+
+        <div class="field">
+            <label>Depth</label>
+
+            <input
+                type="number"
+                id="text-depth"
+                value="12"
+                min="3"
+                max="25"
+                oninput="generateText()">
+        </div>
+
+        <div class="field">
+            <label>Scale</label>
+
+            <input
+                type="number"
+                id="text-scale"
+                value="1.8"
+                min=".5"
+                max="5"
+                step=".1"
+                oninput="generateText()">
+        </div>
+
+        <div class="field">
+            <label>Rotate X</label>
+
+            <div class="range-field">
+                <input
+                    type="range"
+                    id="rx"
+                    min="-180"
+                    max="180"
+                    value="20"
+                    oninput="updateRotation()">
+
+                <span class="range-value" id="rx-value">20°</span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Rotate Y</label>
+
+            <div class="range-field">
+                <input
+                    type="range"
+                    id="ry"
+                    min="-180"
+                    max="180"
+                    value="40"
+                    oninput="updateRotation()">
+
+                <span class="range-value" id="ry-value">40°</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="grid">
+
+        <div class="field">
+            <label>Rotate Z</label>
+
+            <div class="range-field">
+                <input
+                    type="range"
+                    id="rz"
+                    min="-180"
+                    max="180"
+                    value="0"
+                    oninput="updateRotation()">
+
+                <span class="range-value" id="rz-value">0°</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="btn secondary"
+            id="animate-button"
+            onclick="toggleAnimation()">
+            Animate
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="copyOutput()">
+            Copy
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="downloadOutput()">
+            Download
+        </button>
+
+    </div>
+
+
+    <div class="output-wrap">
+
+        <div
+            class="output interactive"
+            id="text-output">
+        </div>
+
+    </div>
+
+    <div
+        class="stat"
+        id="text-stat">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     IMAGE
+===================================================== -->
+
+<section class="panel" id="panel-image">
+
+    <div class="field">
+
+        <label>Upload Image</label>
+
+        <input
+            type="file"
+            id="image-input"
+            accept="image/*"
+            onchange="loadImage(event)">
+
+    </div>
+
+
+    <div
+        class="preview"
+        id="image-preview">
+    </div>
+
+
+    <div class="grid">
+
+        <div class="field">
+            <label>Width</label>
+
+            <input
+                type="number"
+                id="image-width"
+                value="120"
+                min="30"
+                max="400"
+                oninput="generateImage()">
+        </div>
+
+        <div class="field">
+            <label>Gamma</label>
+
+            <input
+                type="number"
+                id="image-gamma"
+                value=".7"
+                min=".1"
+                max="3"
+                step=".1"
+                oninput="generateImage()">
+        </div>
+
+        <div class="field">
+            <label>Invert</label>
+
+            <select
+                id="image-invert"
+                onchange="generateImage()">
+
+                <option value="0">NORMAL</option>
+                <option value="1">INVERTED</option>
+
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Charset</label>
+
+            <select
+                id="image-charset"
+                onchange="generateImage()">
+
+                <option value="standard">STANDARD</option>
+                <option value="detailed">DETAILED</option>
+                <option value="blocks">BLOCKS</option>
+                <option value="minimal">MINIMAL</option>
+                <option value="hex">HEX</option>
+
+            </select>
+        </div>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="btn secondary"
+            onclick="copyOutput()">
+            Copy
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="downloadOutput()">
+            Download
+        </button>
+
+    </div>
+
+
+    <div
+        class="output"
+        id="image-output">
+    </div>
+
+    <div
+        class="stat"
+        id="image-stat">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     VIDEO
+===================================================== -->
+
+<section class="panel" id="panel-video">
+
+    <div class="field">
+
+        <label>Video / Webcam</label>
+
+        <input
+            type="file"
+            id="video-input"
+            accept="video/*"
+            onchange="loadVideo(event)">
+
+    </div>
+
+
+    <div
+        class="preview"
+        id="video-preview">
+    </div>
+
+
+    <div class="grid">
+
+        <div class="field">
+            <label>Width</label>
+
+            <input
+                type="number"
+                id="video-width"
+                value="100"
+                min="40"
+                max="300">
+        </div>
+
+        <div class="field">
+            <label>FPS</label>
+
+            <input
+                type="number"
+                id="video-fps"
+                value="12"
+                min="1"
+                max="30">
+        </div>
+
+        <div class="field">
+            <label>Gamma</label>
+
+            <input
+                type="number"
+                id="video-gamma"
+                value=".7"
+                min=".1"
+                max="3"
+                step=".1">
+        </div>
+
+        <div class="field">
+            <label>Charset</label>
+
+            <select id="video-charset">
+
+                <option value="standard">
+                    STANDARD
+                </option>
+
+                <option value="detailed">
+                    DETAILED
+                </option>
+
+                <option value="blocks">
+                    BLOCKS
+                </option>
+
+            </select>
+        </div>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="btn"
+            onclick="startVideo()">
+            Start
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="startCamera()">
+            Webcam
+        </button>
+
+        <button
+            class="btn secondary"
+            onclick="stopVideo()">
+            Stop
+        </button>
+
+    </div>
+
+
+    <div
+        class="output"
+        id="video-output"
+        style="font-size:4px;line-height:.55">
+    </div>
+
+    <div
+        class="stat"
+        id="video-stat">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     API
+===================================================== -->
+
+<div class="api">
+
+    <div class="api-title">
+        API & CURL
+    </div>
+
+    <div class="endpoint">
+
+        <h3>
+            <span class="method">POST</span>
+            <span class="url">muskekk.github.io/asco/api/text</span>
+        </h3>
+
+        <code>
+curl -X POST https://muskekk.github.io/asco/api/text \
+-H "Content-Type: application/json" \
+-d '{"text":"ASCO","depth":12,"rotX":20,"rotY":40}'
+        </code>
+
+    </div>
+
+
+    <div class="endpoint">
+
+        <h3>
+            <span class="method">POST</span>
+            <span class="url">muskekk.github.io/asco/api/image</span>
+        </h3>
+
+        <code>
+curl -X POST https://muskekk.github.io/asco/api/image \
+-F "file=@photo.jpg" \
+-F "width=120" \
+-F "gamma=0.7"
+        </code>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   MATRIX BACKGROUND
+===================================================== */
+
+const matrixCanvas = document.getElementById("matrix");
+const matrixCtx = matrixCanvas.getContext("2d");
+
+let matrixWidth;
+let matrixHeight;
+let matrixColumns;
+let matrixDrops;
+
+const matrixChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>[]{}";
+
+function resizeMatrix() {
+
+    matrixWidth = matrixCanvas.width = window.innerWidth;
+    matrixHeight = matrixCanvas.height = window.innerHeight;
+
+    matrixColumns =
+        Math.floor(matrixWidth / 14);
+
+    matrixDrops =
+        Array(matrixColumns).fill(1);
+}
+
+function drawMatrix() {
+
+    matrixCtx.fillStyle =
+        "rgba(7,6,4,.12)";
+
+    matrixCtx.fillRect(
+        0,
+        0,
+        matrixWidth,
+        matrixHeight
+    );
+
+    matrixCtx.fillStyle =
+        "#ff6500";
+
+    matrixCtx.font =
+        "13px monospace";
+
+    for (
+        let i = 0;
+        i < matrixDrops.length;
+        i++
+    ) {
+
+        const char =
+            matrixChars[
+                Math.floor(
+                    Math.random() *
+                    matrixChars.length
+                )
+            ];
+
+        matrixCtx.fillText(
+            char,
+            i * 14,
+            matrixDrops[i] * 14
+        );
+
+        if (
+            matrixDrops[i] * 14 >
+            matrixHeight &&
+            Math.random() > .975
+        ) {
+            matrixDrops[i] = 0;
+        }
+
+        matrixDrops[i]++;
+    }
+}
+
+resizeMatrix();
+
+window.addEventListener(
+    "resize",
+    resizeMatrix
+);
+
+setInterval(
+    drawMatrix,
+    50
+);
+
+
+/* =====================================================
+   TAB SYSTEM
+===================================================== */
+
+function switchTab(name, button) {
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(tab => {
+            tab.classList.remove("active");
+        });
+
+    document
+        .querySelectorAll(".panel")
+        .forEach(panel => {
+            panel.classList.remove("active");
+        });
+
+    button.classList.add("active");
+
+    document
+        .getElementById("panel-" + name)
+        .classList.add("active");
+}
+
+
+/* =====================================================
+   ASCII FONT STYLES
+===================================================== */
+
+const ASCII_FONTS = {
+
+    solid: {
+        front: ["█", "▓", "▒", "░", "#", "@"],
+        back: [".", ":", "-", "~", " "],
+        right: ["▓", "▒", "░", ":", "."],
+        left: ["▓", "▒", "░", ":", "."],
+        top: ["▀", "¯", "~", "`", "."],
+        bottom: ["▄", "_", "-", ".", " "],
+        inner: ["█", "#", "@", "%", "*"]
+    },
+
+    sharp: {
+        front: ["#", "@", "%", "&", "8"],
+        back: ["-", ":", ".", " "],
+        right: ["/", "=", "+", ":", "."],
+        left: ["\\", "=", "+", ":", "."],
+        top: ["^", "~", "'", "`", "."],
+        bottom: ["_", "-", "=", "+", "."],
+        inner: ["#", "*", "+", ":", "."]
+    },
+
+    tech: {
+        front: ["@", "#", "8", "%", "&"],
+        back: [".", ":", "-", "=", " "],
+        right: [">", "=", "+", "-", "."],
+        left: ["<", "=", "+", "-", "."],
+        top: ["^", "^", "~", ".", " "],
+        bottom: ["v", "_", "-", ".", " "],
+        inner: ["0", "1", "#", "+", "."]
+    },
+
+    soft: {
+        front: ["@", "O", "o", "*", "+"],
+        back: [".", "'", "`", " ", " "],
+        right: ["+", "*", ".", " ", " "],
+        left: ["+", "*", ".", " ", " "],
+        top: ["~", "'", "`", ".", " "],
+        bottom: ["_", "-", ".", " ", " "],
+        inner: ["o", "*", "+", ".", " "]
+    },
+
+    block: {
+        front: ["█", "▓", "▒", "░"],
+        back: ["░", ".", " ", " "],
+        right: ["▓", "▒", "░", " "],
+        left: ["▓", "▒", "░", " "],
+        top: ["▀", "░", ".", " "],
+        bottom: ["▄", "░", ".", " "],
+        inner: ["█", "▓", "▒", "░"]
+    }
+
+};
+
+
+/* =====================================================
+   3D TEXT ENGINE
+===================================================== */
+
+function generateText() {
+
+    const text =
+        document.getElementById("text-input")
+            .value || "ASCO";
+
+    const fontSize =
+        parseInt(
+            document.getElementById("text-size")
+                .value
+        ) || 32;
+
+    const depth =
+        parseInt(
+            document.getElementById("text-depth")
+                .value
+        ) || 12;
+
+    const scale =
+        parseFloat(
+            document.getElementById("text-scale")
+                .value
+        ) || 1.8;
+
+    const rx =
+        parseFloat(
+            document.getElementById("rx").value
+        ) * Math.PI / 180;
+
+    const ry =
+        parseFloat(
+            document.getElementById("ry").value
+        ) * Math.PI / 180;
+
+    const rz =
+        parseFloat(
+            document.getElementById("rz").value
+        ) * Math.PI / 180;
+
+    const style =
+        document.getElementById("font-style").value;
+
+    const font =
+        ASCII_FONTS[style];
+
+
+    /* ---------------------------------------------
+       CREATE HIGH QUALITY TEXT MASK
+    --------------------------------------------- */
+
+    const canvas =
+        document.createElement("canvas");
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.imageSmoothingEnabled = false;
+
+    ctx.font =
+        "900 " +
+        fontSize +
+        "px JetBrains Mono";
+
+    const textWidth =
+        Math.ceil(
+            ctx.measureText(text).width
+        );
+
+    const textHeight =
+        Math.ceil(fontSize * 1.35);
+
+    canvas.width =
+        textWidth + 12;
+
+    canvas.height =
+        textHeight + 12;
+
+
+    ctx.fillStyle = "#000";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.fillStyle = "#fff";
+
+    ctx.font =
+        "900 " +
+        fontSize +
+        "px JetBrains Mono";
+
+    ctx.textBaseline =
+        "middle";
+
+    ctx.fillText(
+        text,
+        6,
+        canvas.height / 2
+    );
+
+
+    const image =
+        ctx.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+    /* ---------------------------------------------
+       VOXEL DATA
+    --------------------------------------------- */
+
+    const voxels =
+        new Set();
+
+    const width =
+        canvas.width;
+
+    const height =
+        canvas.height;
+
+
+    for (
+        let y = 0;
+        y < height;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < width;
+            x++
+        ) {
+
+            const index =
+                (y * width + x) * 4;
+
+            if (
+                image.data[index] > 80
+            ) {
+
+                for (
+                    let z = 0;
+                    z < depth;
+                    z++
+                ) {
+
+                    voxels.add(
+                        x + "," +
+                        y + "," +
+                        z
+                    );
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /* ---------------------------------------------
+       SURFACE VOXELS
+    --------------------------------------------- */
+
+    const surface = [];
+
+    for (
+        let y = 0;
+        y < height;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < width;
+            x++
+        ) {
+
+            const index =
+                (y * width + x) * 4;
+
+            if (
+                image.data[index] <= 80
+            ) {
+                continue;
+            }
+
+            for (
+                let z = 0;
+                z < depth;
+                z++
+            ) {
+
+                const front =
+                    voxels.has(
+                        `${x},${y},${z + 1}`
+                    );
+
+                const back =
+                    voxels.has(
+                        `${x},${y},${z - 1}`
+                    );
+
+                const right =
+                    voxels.has(
+                        `${x + 1},${y},${z}`
+                    );
+
+                const left =
+                    voxels.has(
+                        `${x - 1},${y},${z}`
+                    );
+
+                const top =
+                    voxels.has(
+                        `${x},${y - 1},${z}`
+                    );
+
+                const bottom =
+                    voxels.has(
+                        `${x},${y + 1},${z}`
+                    );
+
+
+                if (
+                    !front ||
+                    !back ||
+                    !right ||
+                    !left ||
+                    !top ||
+                    !bottom
+                ) {
+
+                    surface.push({
+
+                        x:
+                            x -
+                            width / 2,
+
+                        y:
+                            y -
+                            height / 2,
+
+                        z:
+                            z -
+                            depth / 2,
+
+                        gx: x,
+                        gy: y,
+                        gz: z,
+
+                        front,
+                        back,
+                        right,
+                        left,
+                        top,
+                        bottom
+
+                    });
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /* ---------------------------------------------
+       ROTATION
+    --------------------------------------------- */
+
+    function rotate(point) {
+
+        const cosX =
+            Math.cos(rx);
+
+        const sinX =
+            Math.sin(rx);
+
+        const cosY =
+            Math.cos(ry);
+
+        const sinY =
+            Math.sin(ry);
+
+        const cosZ =
+            Math.cos(rz);
+
+        const sinZ =
+            Math.sin(rz);
+
+
+        const y1 =
+            point.y * cosX -
+            point.z * sinX;
+
+        const z1 =
+            point.y * sinX +
+            point.z * cosX;
+
+
+        const x2 =
+            point.x * cosY +
+            z1 * sinY;
+
+        const z2 =
+            -point.x * sinY +
+            z1 * cosY;
+
+
+        const x3 =
+            x2 * cosZ -
+            y1 * sinZ;
+
+        const y3 =
+            x2 * sinZ +
+            y1 * cosZ;
+
+
+        return {
+            x: x3,
+            y: y3,
+            z: z2
+        };
+
+    }
+
+
+    /* ---------------------------------------------
+       PROJECTION
+    --------------------------------------------- */
+
+    const projected = [];
+
+    const perspective = 700;
+
+    for (
+        const voxel of surface
+    ) {
+
+        const p =
+            rotate(voxel);
+
+        const projection =
+            perspective /
+            (
+                perspective +
+                p.z +
+                depth
+            );
+
+
+        const px =
+            Math.round(
+                p.x *
+                projection *
+                scale +
+                160
+            );
+
+        const py =
+            Math.round(
+                p.y *
+                projection *
+                scale +
+                90
+            );
+
+
+        let face =
+            "inner";
+
+        if (!voxel.front)
+            face = "front";
+
+        else if (!voxel.back)
+            face = "back";
+
+        else if (!voxel.right)
+            face = "right";
+
+        else if (!voxel.left)
+            face = "left";
+
+        else if (!voxel.top)
+            face = "top";
+
+        else if (!voxel.bottom)
+            face = "bottom";
+
+
+        const chars =
+            font[face];
+
+
+        const normal =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    voxel.gz /
+                    Math.max(1, depth - 1)
+                )
+            );
+
+
+        const charIndex =
+            Math.floor(
+                normal *
+                (chars.length - 1)
+            );
+
+
+        projected.push({
+
+            x: px,
+            y: py,
+            z: p.z,
+
+            char:
+                chars[charIndex]
+
+        });
+
+    }
+
+
+    /* ---------------------------------------------
+       Z BUFFER
+    --------------------------------------------- */
+
+    const zBuffer =
+        new Map();
+
+    for (
+        const point of projected
+    ) {
+
+        const key =
+            point.x + "," +
+            point.y;
+
+        const old =
+            zBuffer.get(key);
+
+        if (
+            !old ||
+            point.z > old.z
+        ) {
+
+            zBuffer.set(
+                key,
+                point
+            );
+
+        }
+
+    }
+
+
+    if (
+        zBuffer.size === 0
+    ) {
+        return;
+    }
+
+
+    /* ---------------------------------------------
+       FIND BOUNDS
+    --------------------------------------------- */
+
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+
+
+    for (
+        const p of zBuffer.values()
+    ) {
+
+        minX =
+            Math.min(minX, p.x);
+
+        maxX =
+            Math.max(maxX, p.x);
+
+        minY =
+            Math.min(minY, p.y);
+
+        maxY =
+            Math.max(maxY, p.y);
+
+    }
+
+
+    const outputWidth =
+        maxX - minX + 1;
+
+    const outputHeight =
+        maxY - minY + 1;
+
+
+    const grid =
+        Array.from(
+            {
+                length:
+                    outputHeight
+            },
+            () =>
+                Array(
+                    outputWidth
+                ).fill(" ")
+        );
+
+
+    for (
+        const p of zBuffer.values()
+    ) {
+
+        const x =
+            p.x - minX;
+
+        const y =
+            p.y - minY;
+
+        if (
+            x >= 0 &&
+            x < outputWidth &&
+            y >= 0 &&
+            y < outputHeight
+        ) {
+
+            grid[y][x] =
+                p.char;
+
+        }
+
+    }
+
+
+    /* ---------------------------------------------
+       CLEAN EMPTY LINES
+    --------------------------------------------- */
+
+    let output =
+        grid
+            .map(row => row.join("").replace(/\s+$/, ""))
+            .join("\n");
+
+
+    output =
+        output.replace(
+            /^\s*\n/,
+            ""
+        );
+
+
+    document.getElementById(
+        "text-output"
+    ).textContent =
+        output;
+
+
+    document.getElementById(
+        "text-stat"
+    ).textContent =
+        "STYLE: " +
+        style.toUpperCase() +
+        "  |  SURFACE: " +
+        surface.length +
+        "  |  DEPTH: " +
+        depth +
+        "  |  SCALE: " +
+        scale.toFixed(1) +
+        "x";
+
+}
+
+
+/* =====================================================
+   ROTATION UI
+===================================================== */
+
+function updateRotation() {
+
+    const rx =
+        document.getElementById("rx").value;
+
+    const ry =
+        document.getElementById("ry").value;
+
+    const rz =
+        document.getElementById("rz").value;
+
+
+    document.getElementById(
+        "rx-value"
+    ).textContent =
+        rx + "°";
+
+
+    document.getElementById(
+        "ry-value"
+    ).textContent =
+        ry + "°";
+
+
+    document.getElementById(
+        "rz-value"
+    ).textContent =
+        rz + "°";
+
+
+    generateText();
+}
+
+
+/* =====================================================
+   3D MOUSE CONTROL
+===================================================== */
+
+const textOutput =
+    document.getElementById(
+        "text-output"
+    );
+
+let dragging = false;
+let mouseX = 0;
+let mouseY = 0;
+
+
+textOutput.addEventListener(
+    "mousedown",
+    event => {
+
+        if (
+            event.button !== 0
+        ) {
+            return;
+        }
+
+        dragging = true;
+
+        mouseX =
+            event.clientX;
+
+        mouseY =
+            event.clientY;
+
+    }
+);
+
+
+window.addEventListener(
+    "mousemove",
+    event => {
+
+        if (!dragging) {
+            return;
+        }
+
+        const dx =
+            event.clientX -
+            mouseX;
+
+        const dy =
+            event.clientY -
+            mouseY;
+
+
+        mouseX =
+            event.clientX;
+
+        mouseY =
+            event.clientY;
+
+
+        const ry =
+            document.getElementById("ry");
+
+        const rx =
+            document.getElementById("rx");
+
+
+        let ryValue =
+            parseInt(ry.value) +
+            Math.round(dx * .8);
+
+        let rxValue =
+            parseInt(rx.value) -
+            Math.round(dy * .8);
+
+
+        if (
+            ryValue > 180
+        ) {
+            ryValue -= 360;
+        }
+
+        if (
+            ryValue < -180
+        ) {
+            ryValue += 360;
+        }
+
+
+        if (
+            rxValue > 180
+        ) {
+            rxValue -= 360;
+        }
+
+        if (
+            rxValue < -180
+        ) {
+            rxValue += 360;
+        }
+
+
+        ry.value =
+            ryValue;
+
+        rx.value =
+            rxValue;
+
+
+        updateRotation();
+
+    }
+);
+
+
+window.addEventListener(
+    "mouseup",
+    () => {
+        dragging = false;
+    }
+);
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+textOutput.addEventListener(
+    "wheel",
+    event => {
+
+        event.preventDefault();
+
+        const scaleInput =
+            document.getElementById(
+                "text-scale"
+            );
+
+        let scale =
+            parseFloat(
+                scaleInput.value
+            );
+
+
+        if (
+            event.deltaY < 0
+        ) {
+
+            scale =
+                Math.min(
+                    5,
+                    scale + .15
+                );
+
+        } else {
+
+            scale =
+                Math.max(
+                    .5,
+                    scale - .15
+                );
+
+        }
+
+
+        scaleInput.value =
+            scale.toFixed(2);
+
+        generateText();
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+let animationRunning = false;
+let animationFrame;
+
+
+function toggleAnimation() {
+
+    animationRunning =
+        !animationRunning;
+
+
+    const button =
+        document.getElementById(
+            "animate-button"
+        );
+
+
+    if (
+        !animationRunning
+    ) {
+
+        button.textContent =
+            "Animate";
+
+        cancelAnimationFrame(
+            animationFrame
+        );
+
+        return;
+
+    }
+
+
+    button.textContent =
+        "Stop Anim";
+
+
+    function animate() {
+
+        if (
+            !animationRunning
+        ) {
+            return;
+        }
+
+
+        const ry =
+            document.getElementById(
+                "ry"
+            );
+
+
+        let value =
+            parseInt(ry.value) + 2;
+
+
+        if (
+            value > 180
+        ) {
+            value = -180;
+        }
+
+
+        ry.value =
+            value;
+
+
+        updateRotation();
+
+
+        animationFrame =
+            requestAnimationFrame(
+                animate
+            );
+
+    }
+
+
+    animate();
+}
+
+
+/* =====================================================
+   IMAGE ASCII
+===================================================== */
+
+const IMAGE_CHARSETS = {
+
+    standard:
+        " .:-=+*#%@",
+
+    detailed:
+        " .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
+
+    blocks:
+        " ░▒▓█",
+
+    minimal:
+        " .oO@",
+
+    hex:
+        " 123456789ABCDEF"
+
+};
+
+
+let currentImage = null;
+
+
+function loadImage(event) {
+
+    const file =
+        event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e) {
+
+            currentImage =
+                new Image();
+
+
+            currentImage.onload =
+                function() {
+
+                    document.getElementById(
+                        "image-preview"
+                    ).innerHTML =
+                        `<img src="${e.target.result}">`;
+
+                    generateImage();
+
+                };
+
+
+            currentImage.src =
+                e.target.result;
+
+        };
+
+
+    reader.readAsDataURL(file);
+}
+
+
+function generateImage() {
+
+    if (!currentImage) {
+        return;
+    }
+
+
+    const width =
+        parseInt(
+            document.getElementById(
+                "image-width"
+            ).value
+        );
+
+
+    const gamma =
+        parseFloat(
+            document.getElementById(
+                "image-gamma"
+            ).value
+        );
+
+
+    const inverted =
+        document.getElementById(
+            "image-invert"
+        ).value === "1";
+
+
+    const charset =
+        IMAGE_CHARSETS[
+            document.getElementById(
+                "image-charset"
+            ).value
+        ];
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    const aspect =
+        currentImage.height /
+        currentImage.width;
+
+
+    const height =
+        Math.max(
+            1,
+            Math.floor(
+                width *
+                aspect *
+                .5
+            )
+        );
+
+
+    canvas.width =
+        width;
+
+    canvas.height =
+        height;
+
+
+    ctx.drawImage(
+        currentImage,
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const data =
+        ctx.getImageData(
+            0,
+            0,
+            width,
+            height
+        ).data;
+
+
+    let output = "";
+
+
+    for (
+        let y = 0;
+        y < height;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < width;
+            x++
+        ) {
+
+            const index =
+                (y * width + x) * 4;
+
+
+            const luminance =
+                (
+                    .299 * data[index] +
+                    .587 * data[index + 1] +
+                    .114 * data[index + 2]
+                ) / 255;
+
+
+            const adjusted =
+                Math.pow(
+                    luminance,
+                    gamma
+                );
+
+
+            let charIndex =
+                Math.floor(
+                    adjusted *
+                    (charset.length - 1)
+                );
+
+
+            if (
+                inverted
+            ) {
+
+                charIndex =
+                    charset.length -
+                    1 -
+                    charIndex;
+
+            }
+
+
+            output +=
+                charset[
+                    Math.max(
+                        0,
+                        Math.min(
+                            charset.length - 1,
+                            charIndex
+                        )
+                    )
+                ];
+
+        }
+
+        output += "\n";
+
+    }
+
+
+    document.getElementById(
+        "image-output"
+    ).textContent =
+        output;
+
+
+    document.getElementById(
+        "image-stat"
+    ).textContent =
+        "GRID: " +
+        width +
+        " × " +
+        height +
+        "  |  CHARS: " +
+        width * height;
+
+}
+
+
+/* =====================================================
+   VIDEO
+===================================================== */
+
+let videoElement = null;
+let videoRunning = false;
+let videoTimer = null;
+
+
+function loadVideo(event) {
+
+    const file =
+        event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+
+    stopVideo();
+
+
+    const url =
+        URL.createObjectURL(file);
+
+
+    videoElement =
+        document.createElement(
+            "video"
+        );
+
+
+    videoElement.src =
+        url;
+
+    videoElement.loop =
+        true;
+
+    videoElement.muted =
+        true;
+
+    videoElement.playsInline =
+        true;
+
+
+    const preview =
+        document.getElementById(
+            "video-preview"
+        );
+
+
+    preview.innerHTML = "";
+
+    preview.appendChild(
+        videoElement
+    );
+
+
+    videoElement.play();
+
+}
+
+
+function startCamera() {
+
+    if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ) {
+
+        alert(
+            "Webcam is not supported."
+        );
+
+        return;
+
+    }
+
+
+    navigator.mediaDevices
+        .getUserMedia({
+            video: true
+        })
+        .then(stream => {
+
+            stopVideo();
+
+
+            videoElement =
+                document.createElement(
+                    "video"
+                );
+
+
+            videoElement.srcObject =
+                stream;
+
+            videoElement.autoplay =
+                true;
+
+            videoElement.muted =
+                true;
+
+            videoElement.playsInline =
+                true;
+
+
+            const preview =
+                document.getElementById(
+                    "video-preview"
+                );
+
+
+            preview.innerHTML =
+                "";
+
+            preview.appendChild(
+                videoElement
+            );
+
+        })
+        .catch(error => {
+
+            alert(
+                "Webcam error: " +
+                error.message
+            );
+
+        });
+
+}
+
+
+function startVideo() {
+
+    if (!videoElement) {
+
+        alert(
+            "Upload a video or enable webcam first."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        videoRunning
+    ) {
+        return;
+    }
+
+
+    videoRunning = true;
+
+
+    const width =
+        parseInt(
+            document.getElementById(
+                "video-width"
+            ).value
+        );
+
+
+    const fps =
+        parseInt(
+            document.getElementById(
+                "video-fps"
+            ).value
+        );
+
+
+    const gamma =
+        parseFloat(
+            document.getElementById(
+                "video-gamma"
+            ).value
+        );
+
+
+    const charset =
+        IMAGE_CHARSETS[
+            document.getElementById(
+                "video-charset"
+            ).value
+        ];
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    const output =
+        document.getElementById(
+            "video-output"
+        );
+
+
+    function frame() {
+
+        if (
+            !videoRunning
+        ) {
+            return;
+        }
+
+
+        if (
+            videoElement.readyState >= 2 &&
+            videoElement.videoWidth
+        ) {
+
+            const aspect =
+                videoElement.videoHeight /
+                videoElement.videoWidth;
+
+
+            const height =
+                Math.max(
+                    1,
+                    Math.floor(
+                        width *
+                        aspect *
+                        .5
+                    )
+                );
+
+
+            canvas.width =
+                width;
+
+            canvas.height =
+                height;
+
+
+            ctx.drawImage(
+                videoElement,
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            const data =
+                ctx.getImageData(
+                    0,
+                    0,
+                    width,
+                    height
+                ).data;
+
+
+            let ascii = "";
+
+
+            for (
+                let y = 0;
+                y < height;
+                y++
+            ) {
+
+                for (
+                    let x = 0;
+                    x < width;
+                    x++
+                ) {
+
+                    const index =
+                        (y * width + x) * 4;
+
+
+                    const lum =
+                        (
+                            .299 * data[index] +
+                            .587 * data[index + 1] +
+                            .114 * data[index + 2]
+                        ) / 255;
+
+
+                    const adjusted =
+                        Math.pow(
+                            lum,
+                            gamma
+                        );
+
+
+                    const charIndex =
+                        Math.floor(
+                            adjusted *
+                            (charset.length - 1)
+                        );
+
+
+                    ascii +=
+                        charset[
+                            charIndex
+                        ];
+
+                }
+
+                ascii += "\n";
+
+            }
+
+
+            output.textContent =
+                ascii;
+
+
+            document.getElementById(
+                "video-stat"
+            ).textContent =
+                "STREAM: " +
+                width +
+                " × " +
+                height +
+                " @ " +
+                fps +
+                " FPS";
+
+        }
+
+
+        videoTimer =
+            setTimeout(
+                () => {
+                    requestAnimationFrame(
+                        frame
+                    );
+                },
+                1000 / fps
+            );
+
+    }
+
+
+    frame();
+}
+
+
+function stopVideo() {
+
+    videoRunning =
+        false;
+
+
+    if (
+        videoTimer
+    ) {
+
+        clearTimeout(
+            videoTimer
+        );
+
+        videoTimer =
+            null;
+
+    }
+
+
+    if (
+        videoElement &&
+        videoElement.srcObject
+    ) {
+
+        videoElement.srcObject
+            .getTracks()
+            .forEach(
+                track =>
+                    track.stop()
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+function getActiveOutput() {
+
+    const panel =
+        document.querySelector(
+            ".panel.active"
+        );
+
+
+    if (!panel) {
+        return null;
+    }
+
+
+    return panel.querySelector(
+        ".output"
+    );
+}
+
+
+function copyOutput() {
+
+    const output =
+        getActiveOutput();
+
+
+    if (
+        !output ||
+        !output.textContent
+    ) {
+        return;
+    }
+
+
+    navigator.clipboard
+        .writeText(
+            output.textContent
+        )
+        .then(() => {
+
+            const button =
+                event.currentTarget;
+
+            const old =
+                button.textContent;
+
+
+            button.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                () => {
+                    button.textContent =
+                        old;
+                },
+                1000
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   DOWNLOAD
+===================================================== */
+
+function downloadOutput() {
+
+    const output =
+        getActiveOutput();
+
+
+    if (
+        !output ||
+        !output.textContent
+    ) {
+        return;
+    }
+
+
+    const blob =
+        new Blob(
+            [
+                output.textContent
+            ],
+            {
+                type:
+                    "text/plain"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+    link.download =
+        "asco-" +
+        Date.now() +
+        ".txt";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        updateRotation();
+
+        generateText();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
